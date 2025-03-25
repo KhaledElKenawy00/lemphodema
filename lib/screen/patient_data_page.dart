@@ -10,29 +10,26 @@ class PatientDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataStream = context.watch<ScanProvider>().dataStream;
-    final scnProviderBlue = Provider.of<ScanProvider>(context);
+    final scanProviderBlue = Provider.of<ScanProvider>(context);
 
     return Scaffold(
       backgroundColor: pColor,
       appBar: AppBar(
         backgroundColor: pColor,
-        title: Column(
-          children: [
-            Text(
-              "Patient Data",
-              style: TextStyle(
-                fontFamily: "Lemonada",
-                fontSize: Dimentions.fontPercentage(context, 5),
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        title: Text(
+          "Patient Data",
+          style: TextStyle(
+            fontFamily: "Lemonada",
+            fontSize: Dimentions.fontPercentage(context, 5),
+            color: Colors.black,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
       ),
       body:
-          scnProviderBlue.isConnected
+          scanProviderBlue.isConnected
               ? StreamBuilder<Map<String, dynamic>>(
                 stream: dataStream,
                 builder: (context, snapshot) {
@@ -41,39 +38,51 @@ class PatientDataPage extends StatelessWidget {
                   }
                   var jsonData = snapshot.data!;
 
-                  return Column(
-                    children: [
-                      SizedBox(height: Dimentions.hightPercentage(context, 5)),
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Dimentions.hightPercentage(context, 2),
+                      horizontal: Dimentions.widthPercentage(context, 5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        /// **Body Temperature Section**
+                        _buildDataContainer(
+                          context,
+                          title: "Body Temperature",
+                          value: jsonData["temperature"].toString(),
+                          assetPath: "assets/temp.png",
+                        ),
+                        SizedBox(
+                          height: Dimentions.hightPercentage(context, 2),
+                        ),
 
-                      /// **Body Temperature Section**
-                      _buildDataContainer(
-                        context,
-                        title: "Body Temperature",
-                        value: jsonData["temperature"].toString(),
-                        assetPath: "assets/temp.png",
-                      ),
-
-                      SizedBox(height: Dimentions.hightPercentage(context, 2)),
-
-                      /// **Pressure Section**
-                      _buildDataContainer(
-                        context,
-                        title: "Pressure",
-                        value: jsonData["pressure"].toString(),
-                        assetPath: "assets/presu.png",
-                      ),
-                    ],
+                        /// **Pressure Section**
+                        _buildDataContainer(
+                          context,
+                          title: "Pressure",
+                          value: jsonData["pressure"].toString(),
+                          assetPath: "assets/presu.png",
+                        ),
+                      ],
+                    ),
                   );
                 },
               )
               : Center(
-                child: Text(
-                  """Not Connected 🔌🔌 Please Close app and Restart""",
-                  style: TextStyle(
-                    fontSize: Dimentions.fontPercentage(context, 4),
-                    color: Colors.black,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding: EdgeInsets.all(
+                    Dimentions.widthPercentage(context, 5),
+                  ),
+                  child: Text(
+                    "Not Connected 🔌🔌 Please Close app and Restart",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: Dimentions.fontPercentage(context, 4),
+                      color: Colors.black,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -88,8 +97,10 @@ class PatientDataPage extends StatelessWidget {
     required String assetPath,
   }) {
     return Container(
-      margin: EdgeInsets.all(Dimentions.hightPercentage(context, 1)),
-      height: Dimentions.hightPercentage(context, 16),
+      margin: EdgeInsets.symmetric(
+        vertical: Dimentions.hightPercentage(context, 1),
+      ),
+      padding: EdgeInsets.all(Dimentions.widthPercentage(context, 4)),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 133, 126, 126),
@@ -99,47 +110,42 @@ class PatientDataPage extends StatelessWidget {
       ),
       child: Row(
         children: [
+          /// **Text Section**
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: Dimentions.widthPercentage(context, 5),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: Dimentions.fontPercentage(context, 4),
-                      color: Colors.black,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: Dimentions.fontPercentage(context, 4),
+                    color: Colors.black,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
                   ),
-                  SizedBox(height: Dimentions.hightPercentage(context, 1)),
-                  Text(
-                    "Value: $value",
-                    style: TextStyle(
-                      fontFamily: "Lemonada",
-                      fontSize: Dimentions.fontPercentage(context, 4),
-                      color: Colors.black,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                SizedBox(height: Dimentions.hightPercentage(context, 1)),
+                Text(
+                  "Value: $value",
+                  style: TextStyle(
+                    fontFamily: "Lemonada",
+                    fontSize: Dimentions.fontPercentage(context, 4),
+                    color: Colors.black,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              right: Dimentions.widthPercentage(context, 5),
-            ),
-            child: Image.asset(
-              assetPath,
-              height: Dimentions.hightPercentage(context, 15),
-            ),
+
+          /// **Image Section**
+          Image.asset(
+            assetPath,
+            height: Dimentions.hightPercentage(context, 12),
+            width: Dimentions.widthPercentage(context, 23),
+            fit: BoxFit.contain,
           ),
         ],
       ),
