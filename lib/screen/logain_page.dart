@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lymphoedemo/constant/const.dart';
 import 'package:lymphoedemo/constant/dimentions.dart';
 import 'package:lymphoedemo/screen/chose_blutooth_page.dart';
+import 'package:lymphoedemo/screen/chose_exercise_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_handler.dart' as AppSettings;
 
@@ -75,10 +76,50 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        backgroundColor: pColor,
+        child: ListView(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: pColor),
+              child: Center(
+                child: Text(
+                  "Lymphoedema",
+                  style: TextStyle(
+                    fontFamily: "Lemonada",
+                    fontSize: Dimentions.fontPercentage(context, 5),
+                    color: Colors.black,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text(
+                "Exercise",
+                style: TextStyle(
+                  fontFamily: "Lemonada",
+                  fontSize: Dimentions.fontPercentage(context, 5),
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChoseExercisePage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       backgroundColor: pColor,
       appBar: AppBar(
         backgroundColor: pColor,
-        automaticallyImplyLeading: false,
+
         title: Center(
           child: Text(
             "Logain Page",
